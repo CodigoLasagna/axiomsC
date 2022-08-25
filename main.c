@@ -3,7 +3,7 @@
 #include <string.h>
 #include "bools.h"
 
-bool not(bool []);
+bool dnot(bool []);
 bool con(bool [], bool []);
 bool disy(bool [], bool []);
 bool cond(bool [], bool []);
@@ -12,15 +12,12 @@ char* getAxiom(char*);
 void solveAciom(char*, char p, char q, bool P[], bool Q[]);
 
 int main(){
-	bool ans = false;
 	int lim = 10;
 	bool P[] = {true, true, false, false}, Q[] = {true, false, true, false};
 	char type[] = {'!', '^', 'v', '>', '<', '-'};
 	char p, q, T;
 	char* axiom = malloc(32);
-	//scanf(" %[^\n]", axiom);
-	//getAxiom(axiom);
-	//printf("%s\n", axiom);
+	
 	printf(">:");
 	scanf(" %c", &p);
 	scanf(" %c", &q);
@@ -69,16 +66,6 @@ void solveAciom(char* axiom, char p, char q, bool P[], bool Q[]){
 			axiomType = axiom[i];
 		}
 	}
-	//printf("%c\n", inputA);
-	//printf("%c\n", axiomType);
-	//printf("%c\n", inputB);
-	//for (int i = 0; i < 4; i++){
-	//	printf("%s\n", printb(binA[i]));
-	//}
-	//printf("\n-----\n");
-	//for (int i = 0; i < 4; i++){
-	//	printf("%s\n", printb(binB[i]));
-	//}
 	
 	if (axiomType != '!')
 		printf("\n%c %c %c\t\n", inputA, axiomType, inputB);
@@ -87,7 +74,7 @@ void solveAciom(char* axiom, char p, char q, bool P[], bool Q[]){
 	printf("-----\n");
 	switch (axiomType) {
 		case '!':
-			not(binA);
+			dnot(binA);
 		break;
 		case '^':
 			con(binA, binB);
@@ -105,7 +92,6 @@ void solveAciom(char* axiom, char p, char q, bool P[], bool Q[]){
 			bic(binA, binB);
 		break;
 	}
-	printf("\n");
 }
 
 char* getAxiom(char* axiom){
@@ -120,7 +106,7 @@ char* getAxiom(char* axiom){
 	return axiom;
 }
 
-bool not(bool Q[]){
+bool dnot(bool Q[]){
 	for (int i = 0; i < 4; ++i) {
 		if (Q[i] == true){
 			printf("  %i  \n", false);

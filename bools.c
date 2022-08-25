@@ -2,3 +2,4 @@
 char* printb(bool ans){
 	return ans ? "true": "false";
 }
+
