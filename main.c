@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "bools.h"
 
 bool dnot(bool []);
@@ -10,6 +9,8 @@ bool cond(bool [], bool []);
 bool bic(bool [], bool []);
 char* getAxiom(char*);
 void solveAciom(char*, char p, char q, bool P[], bool Q[]);
+void addAxiom(char *input, bool *bin[], char axiom, bool in[]);
+void clean();
 
 int main(){
 	int lim = 10;
@@ -21,16 +22,17 @@ int main(){
 	printf(">:");
 	scanf(" %c", &p);
 	scanf(" %c", &q);
-	printf("\n%c : %c\t\n", p, q);
+	clean();
+	printf("%c : %c\t\n", p, q);
 	printf("-----\n");
 	for(int i = 0; i < 4; ++i){
 		printf("%i : %i\t\n", P[i], Q[i]);
 	}
-	printf("\n");
 	while(true){
 		printf("-----\n");
-		printf("write an axiom\n-----\n");
+		printf("input\n-----\n");
 		scanf(" %[^\n]", axiom);
+		clean();
 		getAxiom(axiom);
 		solveAciom(axiom, p, q, P, Q);
 	}
@@ -40,27 +42,19 @@ int main(){
 void solveAciom(char* axiom, char p, char q, bool P[], bool Q[]){
 	char type = ' ';
 	char inputA = ' ', inputB = ' ', axiomType = ' ';
-	bool binA[4], binB[4];
+	bool *binA[4], *binB[4];
 	for (int i = 0; axiom[i] != '\0'; i++){
 		if (axiom[i] == p){
 			if (inputA == ' '){
-				inputA = axiom[i];
-				for (int i = 0; i < 4; i++)
-					binA[i] = P[i];
+				addAxiom(&inputA, binA, axiom[i], P);
 			}else{
-				inputB = axiom[i];
-				for (int i = 0; i < 4; i++)
-					binB[i] = P[i];
+				addAxiom(&inputB, binB, axiom[i], P);
 			}
 		}else if(axiom[i] == q){
 			if (inputA == ' '){
-				inputA = axiom[i];
-				for (int i = 0; i < 4; i++)
-					binA[i] = Q[i];
+				addAxiom(&inputA, binA, axiom[i], Q);
 			}else{
-				inputB = axiom[i];
-				for (int i = 0; i < 4; i++)
-					binB[i] = Q[i];
+				addAxiom(&inputB, binB, axiom[i], Q);
 			}
 		}else{
 			axiomType = axiom[i];
@@ -68,30 +62,36 @@ void solveAciom(char* axiom, char p, char q, bool P[], bool Q[]){
 	}
 	
 	if (axiomType != '!')
-		printf("\n%c %c %c\t\n", inputA, axiomType, inputB);
+		printf("%c %c %c\t\n", inputA, axiomType, inputB);
 	else
-		printf("  %c \n", inputA);
+		printf(" %c%c \n", axiomType, inputA);
 	printf("-----\n");
 	switch (axiomType) {
 		case '!':
-			dnot(binA);
+			dnot(*binA);
 		break;
 		case '^':
-			con(binA, binB);
+			con(*binA, *binB);
 		break;
 		case 'v':
-			disy(binA, binB);
+			disy(*binA, *binB);
 		break;
 		case '>':
-			cond(binA, binB);
+			cond(*binA, *binB);
 		break;
 		case '<':
-			cond(binB, binA);
+			cond(*binB, *binA);
 		break;
 		case '-':
-			bic(binA, binB);
+			bic(*binA, *binB);
 		break;
 	}
+}
+
+void addAxiom(char *input, bool *bin[], char axiom, bool in[]){
+	input[0] = axiom;
+	for (int i = 0; i < 4; i++)
+		bin[i] = &in[i];
 }
 
 char* getAxiom(char* axiom){
@@ -155,4 +155,23 @@ bool bic(bool P[], bool Q[]){
 		}
 	}
 	return 0;
+}
+void clean(){
+	printf("\033[0;0H");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("\033[0;0H");
 }
