@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include "bools.h"
 
+bool norm(bool Q[]);
 bool dnot(bool []);
 bool con(bool [], bool []);
 bool disy(bool [], bool []);
 bool cond(bool [], bool []);
 bool bic(bool [], bool []);
 char* getAxiom(char*);
-void solveAciom(char*, char p, char q, bool P[], bool Q[]);
+void solveAxiom(char*, char p, char q, bool P[], bool Q[]);
+void solveCompAxiom(char*, char p, char q, bool P[], bool Q[], char*, char*);
 void addAxiom(char *input, bool *bin[], char axiom, bool in[]);
 void clean();
 
@@ -18,6 +20,7 @@ int main(){
 	char type[] = {'!', '^', 'v', '>', '<', '-'};
 	char p, q, T;
 	char* axiom = malloc(32);
+	char* partA = malloc(32), *partB = malloc(32);
 	
 	printf(">:");
 	scanf(" %c", &p);
@@ -34,12 +37,49 @@ int main(){
 		scanf(" %[^\n]", axiom);
 		clean();
 		getAxiom(axiom);
-		solveAciom(axiom, p, q, P, Q);
+		solveCompAxiom(axiom, p, q, P, Q, partA, partB);
+		solveAxiom(partA, p, q, P, Q);
+		solveAxiom(partB, p, q, P, Q);
+		//printf("%s\n", partA);
+		//printf("%s\n", partB);
+		//solveAxiom(axiom, p, q, P, Q);
 	}
 	return 0;
 }
 
-void solveAciom(char* axiom, char p, char q, bool P[], bool Q[]){
+void solveCompAxiom(char* axiom, char p, char q, bool P[], bool Q[], char* partA, char* partB){
+	bool left[2][4], right[2][4];
+	bool toggler = false;
+	int counter = 0;
+	for (int i = 0; axiom[i] != '\0'; i++){
+		if (axiom[i] != '='){
+			if (toggler == false){
+				partA[counter] = axiom[i];
+			}else{
+				partB[counter] = axiom[i];
+			}
+			counter++;
+		}else if (axiom[i] == '='){
+			toggler = true;
+			counter = 0;
+		}
+	}
+	//for (int i = 0; axiom[i] != '\0'; i++){
+	//	if (axiom[i] != '='){
+	//		if (axiom[i] == p || axiom[i] == q){
+	//			if (axiom[i+1] != '\0' && axiom[i+2] != '\0'){
+	//				if (axiom[i+2] !='(' && axiom[i+2] != ')'){
+	//					if(axiom[i+1] != p && axiom[i+1] != q && axiom[i+1] != '='){
+	//						printf("x");
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+}
+
+void solveAxiom(char* axiom, char p, char q, bool P[], bool Q[]){
 	char type = ' ';
 	char inputA = ' ', inputB = ' ', axiomType = ' ';
 	bool *binA[4], *binB[4];
@@ -104,6 +144,17 @@ char* getAxiom(char* axiom){
 	}
 	axiom[count] = '\0';
 	return axiom;
+}
+
+bool norm(bool Q[]){
+	for (int i = 0; i < 4; ++i) {
+		if (Q[i] == true){
+			printf("  %i  \n", true);
+		}else {
+			printf("  %i  \n", false);
+		}
+	}
+	return 0;
 }
 
 bool dnot(bool Q[]){
