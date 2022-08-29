@@ -12,15 +12,18 @@ char* getAxiom(char*);
 void solveAxiom(char*, char p, char q, bool P[], bool Q[]);
 void solveCompAxiom(char*, char p, char q, bool P[], bool Q[], char*, char*);
 void addAxiom(char *input, bool *bin[], char axiom, bool in[]);
+void equal(char*, char*);
 void clean();
+int strlength(char* );
 
 int main(){
 	int lim = 10;
 	bool P[] = {true, true, false, false}, Q[] = {true, false, true, false};
-	char type[] = {'!', '^', 'v', '>', '<', '-'};
+	char type[] = {'!', '^', 'v', '>', '<', '-', '=', '(', ')'};
 	char p, q, T;
 	char* axiom = malloc(32);
 	char* partA = malloc(32), *partB = malloc(32);
+	bool PA[4], PB[4];
 	
 	printf(">:");
 	scanf(" %c", &p);
@@ -37,12 +40,24 @@ int main(){
 		scanf(" %[^\n]", axiom);
 		clean();
 		getAxiom(axiom);
-		solveCompAxiom(axiom, p, q, P, Q, partA, partB);
-		solveAxiom(partA, p, q, P, Q);
-		solveAxiom(partB, p, q, P, Q);
-		//printf("%s\n", partA);
-		//printf("%s\n", partB);
-		//solveAxiom(axiom, p, q, P, Q);
+		if (strlength(axiom) > 1){
+			solveCompAxiom(axiom, p, q, P, Q, partA, partB);
+			solveAxiom(partA, p, q, P, Q);
+			solveAxiom(partB, p, q, P, Q);
+			equal(partA, partB);
+		}else{
+			printf("  %c\n", axiom[0]);
+			printf("-----\n");
+			if (axiom[0] == p){
+				for(int i = 0; i < 4; ++i){
+					printf("  %i\n", P[i]);
+				}
+			}else if (axiom[0] == q){
+				for(int i = 0; i < 4; ++i){
+					printf("  %i\n", Q[i]);
+				}
+			}
+		}
 	}
 	return 0;
 }
@@ -64,19 +79,6 @@ void solveCompAxiom(char* axiom, char p, char q, bool P[], bool Q[], char* partA
 			counter = 0;
 		}
 	}
-	//for (int i = 0; axiom[i] != '\0'; i++){
-	//	if (axiom[i] != '='){
-	//		if (axiom[i] == p || axiom[i] == q){
-	//			if (axiom[i+1] != '\0' && axiom[i+2] != '\0'){
-	//				if (axiom[i+2] !='(' && axiom[i+2] != ')'){
-	//					if(axiom[i+1] != p && axiom[i+1] != q && axiom[i+1] != '='){
-	//						printf("x");
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
 }
 
 void solveAxiom(char* axiom, char p, char q, bool P[], bool Q[]){
@@ -101,6 +103,7 @@ void solveAxiom(char* axiom, char p, char q, bool P[], bool Q[]){
 		}
 	}
 	
+	printf("-----\n");
 	if (axiomType != '!')
 		printf("%c %c %c\t\n", inputA, axiomType, inputB);
 	else
@@ -207,6 +210,26 @@ bool bic(bool P[], bool Q[]){
 	}
 	return 0;
 }
+
+void equal(char* partA, char* partB){
+	printf("-----------------\n");
+	printf("%s=%s\n", partA, partB);
+	bool valid = false;
+	int counter = 0;
+	for (int i = 0; i < 4; ++i){
+		if (partA == partB) {
+			valid = true;
+			counter++;
+		}else{
+			valid = false;
+		}
+		printf("%c = %c : %i\n", partA[i], partB[i], valid);
+	}
+	if (counter == 4){
+		printf("axioma equivalente");
+	}
+}
+
 void clean(){
 	printf("\033[0;0H");
 	printf("                                     \n");
@@ -224,5 +247,15 @@ void clean(){
 	printf("                                     \n");
 	printf("                                     \n");
 	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
 	printf("\033[0;0H");
+}
+int strlength(char* axiom){
+	int counter = 0;
+	for (int i = 0; axiom[i] != '\0'; ++i){
+		counter++;
+	}
+	return counter;
 }
