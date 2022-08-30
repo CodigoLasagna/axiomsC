@@ -267,6 +267,17 @@ void clean(){
 	printf("                                     \n");
 	printf("                                     \n");
 	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
+	printf("                                     \n");
 	printf("\033[0;0H");
 }
 int strlength(char* axiom){
