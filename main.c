@@ -1,10 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "bools.h"
 
 void clean();
 int strlength(char* );
 
 int main(){
+	char* axiom = malloc(30);
+	char p, q;
+	bool P[] = {true, true, false, false}, Q[] = {true, false, true, false};
+	return 0;
 }
 
 void clean(){

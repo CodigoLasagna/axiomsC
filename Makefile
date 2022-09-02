@@ -1,5 +1,5 @@
 CXX := gcc -m32
-CFLAGS := -g -ansi
+CFLAGS := -g -ansi -pedantic-errors
 TARGET := main
 
 SRCS := $(wildcard *.c)

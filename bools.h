@@ -1,4 +1,4 @@
 #pragma once
-enum binary {False = 0, True = 0};
+enum binary {false, true};
 #define bool enum binary
 char* printb(bool ans);
