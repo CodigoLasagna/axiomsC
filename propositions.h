@@ -1,14 +1,14 @@
 #include "bools.h"
 #include <stdio.h>
-//negación
+/*negación*/
 bool dnot(bool [], bool(*)[]);
-//conjución
+/*conjución*/
 bool con(bool [], bool [], bool(*)[]);
-//disyunción
+/*disyunción*/
 bool disy(bool [], bool [], bool(*)[]);
-//condicional
+/*condicional*/
 bool cond(bool [], bool [], bool(*)[]);
-//bicondicional
+/*bicondicional*/
 bool bic(bool [], bool [], bool(*)[]);
 bool norm(bool Q[], bool(*)[]);
 char* getAxiom(char*);

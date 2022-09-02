@@ -2,8 +2,8 @@
 void solveCompAxiom(char* axiom, char p, char q, bool P[], bool Q[], char* partA, char* partB){
 	bool left[2][4], right[2][4];
 	bool toggler = false;
-	int counter = 0;
-	for (int i = 0; axiom[i] != '\0'; i++){
+	int counter = 0, i;
+	for (i = 0; axiom[i] != '\0'; i++){
 		if (axiom[i] != '='){
 			if (toggler == false){
 				partA[counter] = axiom[i];
@@ -22,7 +22,8 @@ void solveAxiom(char* axiom, char p, char q, bool P[], bool Q[], bool(*PC)[]){
 	char type = ' ';
 	char inputA = ' ', inputB = ' ', axiomType = ' ';
 	bool *binA[4], *binB[4];
-	for (int i = 0; axiom[i] != '\0'; i++){
+	int i;
+	for (i = 0; axiom[i] != '\0'; i++){
 		if (axiom[i] == p){
 			if (inputA == ' '){
 				addAxiom(&inputA, binA, axiom[i], P);
@@ -69,14 +70,16 @@ void solveAxiom(char* axiom, char p, char q, bool P[], bool Q[], bool(*PC)[]){
 }
 
 void addAxiom(char *input, bool *bin[], char axiom, bool in[]){
+	int i;
 	input[0] = axiom;
-	for (int i = 0; i < 4; i++)
+	for (i = 0; i < 4; i++)
 		bin[i] = &in[i];
 }
 
 char* getAxiom(char* axiom){
+	int i;
 	int count = 0;
-	for (int i = 0; axiom[i] != '\0'; i++){
+	for (i = 0; axiom[i] != '\0'; i++){
 		if (axiom[i] != ' '){
 			axiom[count] = axiom[i];
 			count++;
@@ -86,21 +89,9 @@ char* getAxiom(char* axiom){
 	return axiom;
 }
 
-//bool norm(bool Q[], bool (*PC)[]){
-//	for (int i = 0; i < 4; ++i) {
-//		if (Q[i] == true){
-//			printf("  %i  \n", true);
-//			(*PC)[i] = true;
-//		}else {
-//			printf("  %i  \n", false);
-//			(*PC)[i] = false;
-//		}
-//	}
-//	return 0;
-//}
-
 bool dnot(bool Q[], bool (*PC)[]){
-	for (int i = 0; i < 4; ++i) {
+	int i;
+	for (i = 0; i < 4; ++i) {
 		if (Q[i] == true){
 			printf("  %i  \n", false);
 			(*PC)[i] = false;
@@ -112,7 +103,8 @@ bool dnot(bool Q[], bool (*PC)[]){
 	return 0;
 }
 bool con(bool P[], bool Q[], bool (*PC)[]){
-	for (int i = 0; i < 4; ++i) {
+	int i;
+	for (i = 0; i < 4; ++i) {
 		if (P[i] == true && Q[i] == true){
 			printf("  %i  \n", true);
 			(*PC)[i] = true;
@@ -124,7 +116,8 @@ bool con(bool P[], bool Q[], bool (*PC)[]){
 	return 0;
 }
 bool disy(bool P[], bool Q[], bool (*PC)[]){
-	for (int i = 0; i < 4; ++i) {
+	int i;
+	for (i = 0; i < 4; ++i) {
 		if (P[i] == false && Q[i] == false){
 			printf("  %i  \n", false);
 			(*PC)[i] = false;
@@ -136,7 +129,8 @@ bool disy(bool P[], bool Q[], bool (*PC)[]){
 	return 0;
 }
 bool cond(bool P[], bool Q[], bool (*PC)[]){
-	for (int i = 0; i < 4; ++i) {
+	int i;
+	for (i = 0; i < 4; ++i) {
 		if (P[i] == true && Q[i] == false){
 			printf("  %i  \n", false);
 			(*PC)[i] = false;
@@ -148,7 +142,8 @@ bool cond(bool P[], bool Q[], bool (*PC)[]){
 	return 0;
 }
 bool bic(bool P[], bool Q[], bool (*PC)[]){
-	for (int i = 0; i < 4; ++i) {
+	int i;
+	for (i = 0; i < 4; ++i) {
 		if (P[i] == Q[i]){
 			printf("  %i  \n", true);
 			(*PC)[i] = true;
@@ -161,12 +156,13 @@ bool bic(bool P[], bool Q[], bool (*PC)[]){
 }
 
 void equal(char* partA, char* partB, bool PA[], bool PB[]){
+	int i;
 	printf("\n-----------\n");
 	printf("  %s=%s\n", partA, partB);
 	printf("-----------\n");
 	bool valid = false;
 	int counter = 0;
-	for (int i = 0; i < 4; ++i){
+	for (i = 0; i < 4; ++i){
 		if (PA[i] == PB[i]) {
 			valid = true;
 			counter++;

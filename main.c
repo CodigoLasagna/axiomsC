@@ -7,6 +7,7 @@ int strlength(char* );
 
 int main(){
 	int lim = 10;
+	int i = 0;
 	bool P[] = {true, true, false, false}, Q[] = {true, false, true, false};
 	char type[] = {'!', '^', 'v', '>', '<', '-', '=', '(', ')'};
 	char p, q, T;
@@ -20,7 +21,7 @@ int main(){
 	clean();
 	printf("%c : %c\t\n", p, q);
 	printf("-----\n");
-	for(int i = 0; i < 4; ++i){
+	for(i = 0; i < 4; ++i){
 		printf("%i : %i\t\n", P[i], Q[i]);
 	}
 	while(true){
@@ -38,11 +39,11 @@ int main(){
 			printf("  %c\n", axiom[0]);
 			printf("-----\n");
 			if (axiom[0] == p){
-				for(int i = 0; i < 4; ++i){
+				for(i = 0; i < 4; ++i){
 					printf("  %i\n", P[i]);
 				}
 			}else if (axiom[0] == q){
-				for(int i = 0; i < 4; ++i){
+				for(i = 0; i < 4; ++i){
 					printf("  %i\n", Q[i]);
 				}
 			}
@@ -52,14 +53,15 @@ int main(){
 }
 
 void clean(){
+	int i;
 	printf("\033[0;0H");
-	for (int i = 0; i < 35; i++)
+	for (i = 0; i < 35; i++)
 		printf("                                     \n");
 	printf("\033[0;0H");
 }
 int strlength(char* axiom){
-	int counter = 0;
-	for (int i = 0; axiom[i] != '\0'; ++i){
+	int counter = 0, i;
+	for (i = 0; axiom[i] != '\0'; ++i){
 		counter++;
 	}
 	return counter;

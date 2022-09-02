@@ -1,5 +1,5 @@
 CXX := gcc -m32
-CFLAGS := -g
+CFLAGS := -g -ansi
 TARGET := main
 
 SRCS := $(wildcard *.c)
