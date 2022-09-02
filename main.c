@@ -1,55 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "propositions.h"
-//comment
+
 void clean();
 int strlength(char* );
 
 int main(){
-	int lim = 10;
-	int i = 0;
-	bool P[] = {true, true, false, false}, Q[] = {true, false, true, false};
-	char type[] = {'!', '^', 'v', '>', '<', '-', '=', '(', ')'};
-	char p, q, T;
-	char* axiom = malloc(32);
-	char* partA = malloc(32), *partB = malloc(32);
-	bool PA[4], PB[4];
-	
-	printf(">:");
-	scanf(" %c", &p);
-	scanf(" %c", &q);
-	clean();
-	printf("%c : %c\t\n", p, q);
-	printf("-----\n");
-	for(i = 0; i < 4; ++i){
-		printf("%i : %i\t\n", P[i], Q[i]);
-	}
-	while(true){
-		printf("-----\n");
-		printf("input\n-----\n");
-		scanf(" %[^\n]", axiom);
-		clean();
-		getAxiom(axiom);
-		if (strlength(axiom) > 1){
-			solveCompAxiom(axiom, p, q, P, Q, partA, partB);
-			solveAxiom(partA, p, q, P, Q, &PA);
-			solveAxiom(partB, p, q, P, Q, &PB);
-			equal(partA, partB, PA, PB);
-		}else{
-			printf("  %c\n", axiom[0]);
-			printf("-----\n");
-			if (axiom[0] == p){
-				for(i = 0; i < 4; ++i){
-					printf("  %i\n", P[i]);
-				}
-			}else if (axiom[0] == q){
-				for(i = 0; i < 4; ++i){
-					printf("  %i\n", Q[i]);
-				}
-			}
-		}
-	}
-	return 0;
 }
 
 void clean(){
