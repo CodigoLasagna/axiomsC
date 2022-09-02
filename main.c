@@ -6,7 +6,7 @@ void clean();
 int strlength(char* );
 
 int main(){
-	char* axiom = malloc(30);
+	char* axiom = malloc(32);
 	char p, q;
 	bool P[] = {true, true, false, false}, Q[] = {true, false, true, false};
 	return 0;
