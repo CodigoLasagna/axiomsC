@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include "bools.h"
 
+/*decompose complex axiom*/
+void solveComplexAxiom(char*);
 /*check variable for var list*/
 void printVar(char, char, char, bool [], bool []);
 /*print values from var*/
 void printValue(char, bool []);
 /*erases spaces from string*/
 void cleanAxiom(char*);
-/*divide axiom*/
-void disolveAxiom(char*);
 /*erases screen*/
 void clean();
 /*returns string size*/
@@ -27,11 +27,32 @@ int main(){
 	printVar(P, P, Q, PA, QA);
 	printVar(Q, P, Q, PA, QA);
 	while (true) {
+		scanf(" %[^\n]", axiom);
+		cleanAxiom(axiom);
+		solveComplexAxiom(axiom);
 	}
-	scanf(" %[^\n]", axiom);
-	cleanAxiom(axiom);
-	printf("%s", axiom);
 	return 0;
+}
+
+void solveComplexAxiom(char* axiom){
+	char* sideA = malloc(32);
+	char* sideB = malloc(32);
+	unsigned int i = 0, counter = 0, turn = 0;
+	for (i = 0; axiom[i] != '\0'; ++i){
+		if (axiom[i] != '='){
+			if (turn == 0){
+				sideA[counter] = axiom[i];
+			}else{
+				sideA[counter] = axiom[i];
+			}
+		}else{
+			counter = 0;
+			turn = 1;
+		}
+		counter++;
+	}
+	printf("%s\n", sideA);
+	printf("%s\n", sideB);
 }
 
 void printVar(char v, char P, char Q, bool PA[], bool QA[]){
@@ -62,13 +83,6 @@ void cleanAxiom(char* axiom){
 		}
 	}
 	axiom[count] = '\0';
-}
-
-void disolveAxiom(char* axiom){
-	short i;
-	for (i = 0; axiom[i] != '\0'; ++i){
-		
-	}
 }
 
 void clean(){
