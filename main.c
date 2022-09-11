@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include "bools.h"
 
+/*check equality*/
+void checkEquality(bool[], bool[]);
+
+void conju(bool[], bool[], bool*);
+void disy(bool[], bool[], bool*);
+void cond(bool[], bool[], bool*);
+void cond(bool[], bool[], bool*);
+void bic(bool[], bool[], bool*);
+
 /*solver for a side*/
 void solveSimpleAxiom(char*, char, char, bool[], bool[], bool*);
 /*decompose complex axiom*/
@@ -23,6 +32,7 @@ int main(){
 	char v, P, Q;
 	bool PA[] = {true, true, false, false}, QA[] = {true, false, true, false};
 	bool ansA[4], ansB[4];
+	int i;
 
 	printf("introduzca P:\n");
 	scanf(" %c", &P);
@@ -32,25 +42,50 @@ int main(){
 	printVar(P, P, Q, PA, QA);
 	printVar(Q, P, Q, PA, QA);
 	while (true) {
+		printf("\n>");
 		scanf(" %[^\n]", compoundAxiom);
 		cleanAxiom(compoundAxiom);
 		solveCompoundAxiom(compoundAxiom, sideA, sideB, &parts);
-		printf("%s\n\n", compoundAxiom);
+		printf("\n---------------\n");
+		printf("%s", compoundAxiom);
+		printf("\n---------------");
 		if (parts == false){
-			printf("Number of sides 1\n");
 			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
+			printf("\n%s[", sideA);
+			for (i = 0; i < 4; ++i)
+				printf("%i", ansA[i]);
+			printf("]\n");
 		}else{
-			printf("Number of sides 2\n");
-			printf("SideA: %s\n", sideA);
 			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
-			printf("----------\n\n");
-			printf("SideB: %s\n", sideB);
 			solveSimpleAxiom(sideB, P, Q, PA, QA, ansB);
+			printf("\n%s[", sideA);
+			for (i = 0; i < 4; ++i)
+				printf("%i", ansA[i]);
+			printf("]");
+			printf("\n%s[", sideB);
+			for (i = 0; i < 4; ++i)
+				printf("%i", ansB[i]);
+			printf("]\n");
+			checkEquality(ansA, ansB);
 		}
 		parts = false;
 	}
 	return 0;
 }
+
+void checkEquality(bool sideA[], bool sideB[]){
+	int i, counter = 0;
+	for (i = 0; i < 4; ++i){
+		if (sideA[i] == sideB[i])
+			counter++;
+	}
+	if (counter == 4){
+		printf("demostracion verdadera\n");
+	}else{
+		printf("demostracion falsa\n");
+	}
+}
+
 void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], bool ans[]){
 	unsigned int i, j;
 	char* child = malloc(16);
@@ -99,16 +134,25 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 				negative = false;
 			}else{
 				if (simpleAxiom[i] == ')'){
-					int k = 0;
-					recursive = false;
-					child[childSelector+1] = '\0';
-					childSelector = 0;
-					selector++;
 					solveSimpleAxiom(child, P, Q, PA, QA, childAns);
+					for (j = 0; j < 4; j++){
+						if (negative == true){
+							solution[selector][j] = !childAns[j];
+						}else{
+							solution[selector][j] = childAns[j];
+						}
+					}
+					/*
 					if (childN == 1)
 						printf("childA: %s\n", child);
 					if (childN == 2)
 						printf("childB: %s\n", child);
+					*/
+					selector++;
+					child[childSelector+1] = '\0';
+					childSelector = 0;
+					recursive = false;
+					negative = false;
 				}
 				if (simpleAxiom[i] != '(' && simpleAxiom[i] != ')'){ 
 					child[childSelector] = simpleAxiom[i];
@@ -119,6 +163,7 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 			negative = true;
 		}
 	}
+	/*
 	if (connector != '0')
 		printf("connector = %c\n", connector);
 	if (childN > 0)
@@ -136,6 +181,31 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 			printf("%i", solution[1][i]);
 		}
 		printf("\n");
+	}
+	*/
+	
+	if (selector > 1){
+		switch (connector) {
+			case '^':
+				conju(solution[0], solution[1], ans);
+			break;
+			case 'v':
+				disy(solution[0], solution[1], ans);
+			break;
+			case '>':
+				cond(solution[0], solution[1], ans);
+			break;
+			case '<':
+				cond(solution[1], solution[0], ans);
+			break;
+			case '-':
+				bic(solution[0], solution[1], ans);
+			break;
+		}
+	}else{
+		for (i = 0; i < 4; ++i){
+			ans[i] = solution[0][i];
+		}
 	}
 	selector = 0;
 }
@@ -160,6 +230,48 @@ void solveCompoundAxiom(char* axiom, char* sideA, char* sideB, bool* parts){
 		}
 	}
 }
+
+void conju(bool P[], bool Q[], bool* PC){
+	int i;
+	for (i = 0; i < 4; ++i) {
+		if (P[i] == true && Q[i] == true){
+			PC[i] = true;
+		}else {
+			PC[i] = false;
+		}
+	}
+}
+void disy(bool P[], bool Q[], bool PC[]){
+	int i;
+	for (i = 0; i < 4; ++i) {
+		if (P[i] == false && Q[i] == false){
+			PC[i] = false;
+		}else {
+			PC[i] = true;
+		}
+	}
+}
+void cond(bool P[], bool Q[], bool PC[]){
+	int i;
+	for (i = 0; i < 4; ++i) {
+		if (P[i] == true && Q[i] == false){
+			PC[i] = false;
+		}else {
+			PC[i] = true;
+		}
+	}
+}
+void bic(bool P[], bool Q[], bool PC[]){
+	int i;
+	for (i = 0; i < 4; ++i) {
+		if (P[i] == Q[i]){
+			PC[i] = true;
+		}else {
+			PC[i] = false;
+		}
+	}
+}
+
 
 void printVar(char v, char P, char Q, bool PA[], bool QA[]){
 	if (v == P){
