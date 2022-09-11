@@ -35,67 +35,109 @@ int main(){
 		scanf(" %[^\n]", compoundAxiom);
 		cleanAxiom(compoundAxiom);
 		solveCompoundAxiom(compoundAxiom, sideA, sideB, &parts);
+		printf("%s\n\n", compoundAxiom);
 		if (parts == false){
-			printf("Number of parts is 1\n");
+			printf("Number of sides 1\n");
 			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
 		}else{
-			printf("Number of parts is 2\n");
+			printf("Number of sides 2\n");
+			printf("SideA: %s\n", sideA);
+			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
+			printf("----------\n\n");
+			printf("SideB: %s\n", sideB);
+			solveSimpleAxiom(sideB, P, Q, PA, QA, ansB);
 		}
-		printf("%s\n", compoundAxiom);
 		parts = false;
 	}
 	return 0;
 }
 void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], bool ans[]){
 	unsigned int i, j;
-	char* parent = malloc(16);
-	bool parentAns[4];
+	char* child = malloc(16);
+	bool childAns[4];
+	int childN = 0;
 	bool solution[2][4];
 	char connector = '0';
-	int finalCounter = 0, parentCounter = 0;
-	bool recursive = false;
+	int selector = 0, childSelector = 0;
+	bool recursive = false, negative = false;
 	for (i = 0; simpleAxiom[i] != '\0'; ++i){
 		if (simpleAxiom[i] != '!'){
 			if (simpleAxiom[i] == '('){
 				recursive = true;
+				childN++;
 			}
 			if (recursive == false){
 				if (simpleAxiom[i] == P){
 					for (j = 0; j < 4; j++){
-						solution[0][j] = PA[j];
+						if (negative == true){
+							solution[selector][j] = !PA[j];
+						}else{
+							solution[selector][j] = PA[j];
+						}
+						/*
+						ans[j] = PA[j];
+						*/
 					}
+					selector++;
 				}else if (simpleAxiom[i] == Q){
 					for (j = 0; j < 4; j++){
-						solution[1][j] = QA[j];
+						if (negative == true){
+							solution[selector][j] = !QA[j];
+						}else{
+							solution[selector][j] = QA[j];
+						}
+						/*
+						ans[j] = QA[j];
+						*/
 					}
+					selector++;
 				}else{
 					if (simpleAxiom[i] != ')' && simpleAxiom[i] != P && simpleAxiom[i] != Q){
 						connector = simpleAxiom[i];
 					}
 				}
-				finalCounter++;
+				negative = false;
 			}else{
 				if (simpleAxiom[i] == ')'){
 					int k = 0;
 					recursive = false;
-					parent[parentCounter+1] = '\0';
-					parentCounter = 0;
-					finalCounter++;
-					printf("\n----\n");
-					solveSimpleAxiom(parent, P, Q, PA, QA, parentAns);
-					printf("\n----\n");
+					child[childSelector+1] = '\0';
+					childSelector = 0;
+					selector++;
+					solveSimpleAxiom(child, P, Q, PA, QA, childAns);
+					if (childN == 1)
+						printf("childA: %s\n", child);
+					if (childN == 2)
+						printf("childB: %s\n", child);
 				}
 				if (simpleAxiom[i] != '(' && simpleAxiom[i] != ')'){ 
-					parent[parentCounter] = simpleAxiom[i];
-					parentCounter++;
+					child[childSelector] = simpleAxiom[i];
+					childSelector++;
 				}
 			}
+		}else{
+			negative = true;
 		}
 	}
-	printf("finalCounter: %i\n", finalCounter);
-	printf("connector = %c\n", connector);
-	printf("parent: %s\n", parent);
-	finalCounter = 0;
+	if (connector != '0')
+		printf("connector = %c\n", connector);
+	if (childN > 0)
+		printf("parent: %s\n", simpleAxiom);
+	printf("----------\n");
+	printf("parts of side: %i\n", selector);
+	if (selector == 1){
+		for (i = 0; i < 4; i++) {
+			printf("%i", solution[0][i]);
+		}
+		printf("\n");
+	}
+	if (selector == 2){
+		for (i = 0; i < 4; i++) {
+			printf("%i", solution[1][i]);
+		}
+		printf("\n");
+	}
+	selector = 0;
 }
 
 void solveCompoundAxiom(char* axiom, char* sideA, char* sideB, bool* parts){
@@ -117,10 +159,6 @@ void solveCompoundAxiom(char* axiom, char* sideA, char* sideB, bool* parts){
 			*parts = true;
 		}
 	}
-	/*
-	printf("%s\n", sideA);
-	printf("%s\n", sideB);
-	*/
 }
 
 void printVar(char v, char P, char Q, bool PA[], bool QA[]){
