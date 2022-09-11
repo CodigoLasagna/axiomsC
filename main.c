@@ -125,13 +125,13 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 		printf("parent: %s\n", simpleAxiom);
 	printf("----------\n");
 	printf("parts of side: %i\n", selector);
-	if (selector == 1){
+	if (selector > 0){
 		for (i = 0; i < 4; i++) {
 			printf("%i", solution[0][i]);
 		}
 		printf("\n");
 	}
-	if (selector == 2){
+	if (selector > 1){
 		for (i = 0; i < 4; i++) {
 			printf("%i", solution[1][i]);
 		}
