@@ -28,19 +28,27 @@ int strlength(char*);
 
 int main(){
 	char* compoundAxiom = malloc(16), *sideA = malloc(16), *sideB = malloc(16);
-	bool parts = false;
+	bool parts = false, debug = true;
 	char v, P, Q;
 	bool PA[] = {true, true, false, false}, QA[] = {true, false, true, false};
 	bool ansA[4], ansB[4];
 	int i;
-
+	
 	printf("introduzca P:\n");
 	scanf(" %c", &P);
 	printf("introduzca Q:\n");
 	scanf(" %c", &Q);
-	printf("Sus variables son\n");
+	printf("Sus literales son\n");
 	printVar(P, P, Q, PA, QA);
 	printVar(Q, P, Q, PA, QA);
+	if (debug == true){
+		printf("introduzca una literal simple como '%c'\nuna proposicion simple como la de abajo\n", P);
+		printf("%c>%c\no un axioma complejo como alguno de los siguientes\n", P, Q);
+		printf("%c>%c=!%c>!%c\n", P, Q, Q, P);
+		printf("%c-%c=(%c>%c)^(%c<%c)\n", P, Q, P, Q, P, Q);
+		printf("las siguientes conectivas logicas pueden ser usadas\n");
+		printf("[!]negacion\n[^]conjucion\n[v]disyuncion\n[>]condicional izq. a der.\n[<]condicional der. a izq.\n[-]bicondicional\n");
+	}
 	while (true) {
 		printf("\n>");
 		scanf(" %[^\n]", compoundAxiom);
