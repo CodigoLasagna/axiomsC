@@ -8,7 +8,6 @@ void checkEquality(bool[], bool[]);
 void conju(bool[], bool[], bool*);
 void disy(bool[], bool[], bool*);
 void cond(bool[], bool[], bool*);
-void cond(bool[], bool[], bool*);
 void bic(bool[], bool[], bool*);
 
 /*solver for a side*/
@@ -117,9 +116,6 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 						}else{
 							solution[selector][j] = PA[j];
 						}
-						/*
-						ans[j] = PA[j];
-						*/
 					}
 					selector++;
 				}else if (simpleAxiom[i] == Q){
@@ -129,9 +125,6 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 						}else{
 							solution[selector][j] = QA[j];
 						}
-						/*
-						ans[j] = QA[j];
-						*/
 					}
 					selector++;
 				}else{
@@ -150,12 +143,6 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 							solution[selector][j] = childAns[j];
 						}
 					}
-					/*
-					if (childN == 1)
-						printf("childA: %s\n", child);
-					if (childN == 2)
-						printf("childB: %s\n", child);
-					*/
 					selector++;
 					child[childSelector+1] = '\0';
 					childSelector = 0;
@@ -171,27 +158,6 @@ void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], b
 			negative = true;
 		}
 	}
-	/*
-	if (connector != '0')
-		printf("connector = %c\n", connector);
-	if (childN > 0)
-		printf("parent: %s\n", simpleAxiom);
-	printf("----------\n");
-	printf("parts of side: %i\n", selector);
-	if (selector > 0){
-		for (i = 0; i < 4; i++) {
-			printf("%i", solution[0][i]);
-		}
-		printf("\n");
-	}
-	if (selector > 1){
-		for (i = 0; i < 4; i++) {
-			printf("%i", solution[1][i]);
-		}
-		printf("\n");
-	}
-	*/
-	
 	if (selector > 1){
 		switch (connector) {
 			case '^':
