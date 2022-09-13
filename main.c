@@ -49,30 +49,29 @@ int main(){
 		printf("[!]negacion\n[^]conjucion\n[v]disyuncion\n[>]condicional izq. a der.\n[<]condicional der. a izq.\n[-]bicondicional\n");
 	}
 	while (true) {
+		printf("\n---------------");
 		printf("\n>");
 		scanf(" %[^\n]", compoundAxiom);
+		printf("---------------\n");
 		cleanAxiom(compoundAxiom);
 		solveCompoundAxiom(compoundAxiom, sideA, sideB, &parts);
-		printf("\n---------------\n");
-		printf("%s", compoundAxiom);
-		printf("\n---------------");
 		if (parts == false){
 			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
-			printf("\n%s[", sideA);
+			printf("\n[");
 			for (i = 0; i < 4; ++i)
 				printf("%i", ansA[i]);
-			printf("]\n");
+			printf("]\t%s\n", sideA);
 		}else{
 			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
 			solveSimpleAxiom(sideB, P, Q, PA, QA, ansB);
-			printf("\n%s[", sideA);
+			printf("\n[");
 			for (i = 0; i < 4; ++i)
 				printf("%i", ansA[i]);
-			printf("]");
-			printf("\n%s[", sideB);
+			printf("]\t%s\n", sideA);
+			printf("[");
 			for (i = 0; i < 4; ++i)
 				printf("%i", ansB[i]);
-			printf("]\n");
+			printf("]\t%s\n", sideB);
 			checkEquality(ansA, ansB);
 		}
 		parts = false;
