@@ -185,46 +185,46 @@ void solveCompoundAxiom(char* axiom, char* sideA, char* sideB, bool* parts){
 	}
 }
 
-void conju(bool P[], bool Q[], bool* PC){
+void conju(bool inpA[], bool inpB[], bool* ans){
 	int i;
 	for (i = 0; i < 4; ++i) {
-		if (P[i] == true && Q[i] == true){
-			PC[i] = true;
+		if (inpA[i] == true && inpB[i] == true){
+			ans[i] = true;
 		}else {
-			PC[i] = false;
+			ans[i] = false;
 		}
 	}
 }
 
-void disy(bool P[], bool Q[], bool PC[]){
+void disy(bool inpA[], bool inpB[], bool ans[]){
 	int i;
 	for (i = 0; i < 4; ++i) {
-		if (P[i] == false && Q[i] == false){
-			PC[i] = false;
+		if (inpA[i] == false && inpB[i] == false){
+			ans[i] = false;
 		}else {
-			PC[i] = true;
+			ans[i] = true;
 		}
 	}
 }
 
-void cond(bool P[], bool Q[], bool PC[]){
+void cond(bool inpA[], bool inpB[], bool ans[]){
 	int i;
 	for (i = 0; i < 4; ++i) {
-		if (P[i] == true && Q[i] == false){
-			PC[i] = false;
+		if (inpA[i] == true && inpB[i] == false){
+			ans[i] = false;
 		}else {
-			PC[i] = true;
+			ans[i] = true;
 		}
 	}
 }
 
-void bic(bool P[], bool Q[], bool PC[]){
+void bic(bool inpA[], bool inpB[], bool ans[]){
 	int i;
 	for (i = 0; i < 4; ++i) {
-		if (P[i] == Q[i]){
-			PC[i] = true;
+		if (inpA[i] == inpB[i]){
+			ans[i] = true;
 		}else {
-			PC[i] = false;
+			ans[i] = false;
 		}
 	}
 }
