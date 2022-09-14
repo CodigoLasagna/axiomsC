@@ -11,25 +11,22 @@ void cond(bool[], bool[], bool*);
 void bic(bool[], bool[], bool*);
 
 /*solver for a side*/
-void solveSimpleAxiom(char*, char, char, bool[], bool[], bool*);
+void solveSimpleAxiom(char*, char, char, bool[], bool*);
 /*decompose complex axiom*/
 void solveCompoundAxiom(char*, char*, char*, bool*);
 /*check variable for var list*/
 void printVar(char, char, char, bool [], bool []);
 /*print values from var*/
-void printValue(char, bool []);
+void printValue(char*, bool []);
 /*erases spaces from string*/
 void cleanAxiom(char*);
-/*erases screen*/
-void clean();
-/*returns string size*/
-int strlength(char*);
 
 int main(){
 	char* compoundAxiom = malloc(16), *sideA = malloc(16), *sideB = malloc(16);
 	bool parts = false, debug = true;
 	char v, P, Q;
-	bool PA[] = {true, true, false, false}, QA[] = {true, false, true, false};
+	bool tTable[] = {true, true, false, false,
+					 true, false, true, false};
 	bool ansA[4], ansB[4];
 	int i;
 	
@@ -38,8 +35,8 @@ int main(){
 	printf("introduzca Q:\n");
 	scanf(" %c", &Q);
 	printf("Sus literales son\n");
-	printVar(P, P, Q, PA, QA);
-	printVar(Q, P, Q, PA, QA);
+	printVar(P, P, Q, tTable, tTable+4);
+	printVar(Q, P, Q, tTable, tTable+4);
 	if (debug == true){
 		printf("introduzca una literal simple como '%c'\nuna proposicion simple como la de abajo\n", P);
 		printf("%c>%c\no un axioma complejo como alguno de los siguientes\n", P, Q);
@@ -56,22 +53,13 @@ int main(){
 		cleanAxiom(compoundAxiom);
 		solveCompoundAxiom(compoundAxiom, sideA, sideB, &parts);
 		if (parts == false){
-			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
-			printf("\n[");
-			for (i = 0; i < 4; ++i)
-				printf("%i", ansA[i]);
-			printf("]\t%s\n", sideA);
+			solveSimpleAxiom(sideA, P, Q, tTable, ansA);
+			printValue(sideA, ansA);
 		}else{
-			solveSimpleAxiom(sideA, P, Q, PA, QA, ansA);
-			solveSimpleAxiom(sideB, P, Q, PA, QA, ansB);
-			printf("\n[");
-			for (i = 0; i < 4; ++i)
-				printf("%i", ansA[i]);
-			printf("]\t%s\n", sideA);
-			printf("[");
-			for (i = 0; i < 4; ++i)
-				printf("%i", ansB[i]);
-			printf("]\t%s\n", sideB);
+			solveSimpleAxiom(sideA, P, Q, tTable, ansA);
+			solveSimpleAxiom(sideB, P, Q, tTable, ansB);
+			printValue(sideA, ansA);
+			printValue(sideB, ansB);
 			checkEquality(ansA, ansB);
 		}
 		parts = false;
@@ -92,70 +80,56 @@ void checkEquality(bool sideA[], bool sideB[]){
 	}
 }
 
-void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool PA[], bool QA[], bool ans[]){
+void solveSimpleAxiom(char* simpleAxiom, char P, char Q, bool tTable[], bool ans[]){
 	unsigned int i, j;
-	char* child = malloc(16);
-	bool childAns[4];
-	int childN = 0;
-	bool solution[2][4];
-	char connector = '0';
-	int selector = 0, childSelector = 0;
+	int selector = 0, childSelector = 0, literal = 1;
+	char* child = malloc(16), connector = '0', v = ' ';
+	bool childAns[4], solution[2][4];
 	bool recursive = false, negative = false;
 	for (i = 0; simpleAxiom[i] != '\0'; ++i){
-		if (simpleAxiom[i] != '!'){
-			if (simpleAxiom[i] == '('){
-				recursive = true;
-				childN++;
-			}
-			if (recursive == false){
-				if (simpleAxiom[i] == P){
-					for (j = 0; j < 4; j++){
-						if (negative == true){
-							solution[selector][j] = !PA[j];
-						}else{
-							solution[selector][j] = PA[j];
-						}
-					}
-					selector++;
-				}else if (simpleAxiom[i] == Q){
-					for (j = 0; j < 4; j++){
-						if (negative == true){
-							solution[selector][j] = !QA[j];
-						}else{
-							solution[selector][j] = QA[j];
-						}
-					}
-					selector++;
-				}else{
-					if (simpleAxiom[i] != ')' && simpleAxiom[i] != P && simpleAxiom[i] != Q){
-						connector = simpleAxiom[i];
-					}
-				}
-				negative = false;
-			}else{
-				if (simpleAxiom[i] == ')'){
-					solveSimpleAxiom(child, P, Q, PA, QA, childAns);
-					for (j = 0; j < 4; j++){
-						if (negative == true){
-							solution[selector][j] = !childAns[j];
-						}else{
-							solution[selector][j] = childAns[j];
-						}
-					}
-					selector++;
-					child[childSelector+1] = '\0';
-					childSelector = 0;
-					recursive = false;
-					negative = false;
-				}
-				if (simpleAxiom[i] != '(' && simpleAxiom[i] != ')'){ 
-					child[childSelector] = simpleAxiom[i];
-					childSelector++;
-				}
-			}
-		}else{
+		if (simpleAxiom[i] == '!'){
 			negative = true;
+			i++;
 		}
+		if (simpleAxiom[i] == '('){
+			recursive = true;
+			i++;
+		}
+		if (simpleAxiom[i] == ')'){
+			selector++;
+			childSelector = 0;
+			recursive = false;
+			negative = false;
+		}
+		if (recursive == false){
+			if (simpleAxiom[i] == P || simpleAxiom[i] == Q){
+				if (simpleAxiom[i] == P){
+					literal = 0;
+				}
+				if (simpleAxiom[i] == Q){
+					literal = 1;
+				}
+				for (j = 0; j < 4; j++){
+					solution[selector][j] = negative ? !tTable[literal*4+j]:tTable[literal*4+j];
+				}
+				selector++;
+			}else{
+				if (selector == 1){
+					connector = simpleAxiom[i];
+				}
+			}
+			negative = false;
+		}
+		if (recursive == true){
+			child[childSelector] = simpleAxiom[i];
+			childSelector++;
+			child[childSelector+1] = '\0';
+			solveSimpleAxiom(child, P, Q, tTable, childAns);
+			for (j = 0; j < 4; j++){
+				solution[selector][j] = negative ? !childAns[j]:childAns[j];
+			}
+		}
+		
 	}
 	if (selector > 1){
 		switch (connector) {
@@ -214,6 +188,7 @@ void conju(bool P[], bool Q[], bool* PC){
 		}
 	}
 }
+
 void disy(bool P[], bool Q[], bool PC[]){
 	int i;
 	for (i = 0; i < 4; ++i) {
@@ -224,6 +199,7 @@ void disy(bool P[], bool Q[], bool PC[]){
 		}
 	}
 }
+
 void cond(bool P[], bool Q[], bool PC[]){
 	int i;
 	for (i = 0; i < 4; ++i) {
@@ -234,6 +210,7 @@ void cond(bool P[], bool Q[], bool PC[]){
 		}
 	}
 }
+
 void bic(bool P[], bool Q[], bool PC[]){
 	int i;
 	for (i = 0; i < 4; ++i) {
@@ -245,23 +222,22 @@ void bic(bool P[], bool Q[], bool PC[]){
 	}
 }
 
-
 void printVar(char v, char P, char Q, bool PA[], bool QA[]){
 	if (v == P){
-		printValue(v, PA);
+		printValue(&v, PA);
 	}
 	if (v == Q){
-		printValue(v, QA);
+		printValue(&v, QA);
 	}
 }
 
-void printValue(char v, bool VA[]){
+void printValue(char* v, bool VA[]){
 	short i;
-	printf("%c [", v);
+	printf("[");
 	for (i = 0; i < 4; ++i){
 		printf("%i", VA[i]);
 	}
-	printf("]\n");
+	printf("] %s\n", v);
 }
 
 void cleanAxiom(char* axiom){
@@ -274,20 +250,4 @@ void cleanAxiom(char* axiom){
 		}
 	}
 	axiom[count] = '\0';
-}
-
-void clean(){
-	short i;
-	printf("\033[0;0H");
-	for (i = 0; i < 35; i++)
-		printf("                                     \n");
-	printf("\033[0;0H");
-}
-
-int strlength(char* str){
-	short counter = 0, i;
-	for (i = 0; str[i] != '\0'; ++i){
-		counter++;
-	}
-	return counter;
 }
